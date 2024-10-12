@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Algorithm Visualizer</title>
+    <link rel="stylesheet" href="selection.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sorting Algorithm Visualizer</h1>
+        
+        <div class="controls">
+            <input type="text" id="arrayInput" placeholder="Enter numbers (e.g., 5,2,9,1,5)">
+            <button id="randomArrayBtn">Random Array</button>
+            <select id="algorithmSelect">
+                <option value="merge">Merge Sort</option>
+                <option value="selection">Selection Sort</option>
+                <option value="insertion">Insertion Sort</option>
+                <option value="bubble">Bubble Sort</option>
+                <option value="quick">Quick Sort</option>
+            </select>
+            <button id="startBtn">Start Sorting</button>
+            <button id="stepBtn">Step</button>
+            <button id="resetBtn">Reset</button>
+            <button id="compareBtn">Compare with Another Algorithm</button>
+            <input type="range" id="speedControl" min="1" max="5" value="3">
+            <span id="speedValue">Speed: 3</span>
+        </div>
+
+        <div class="visualizers">
+            <div class="visualizer">
+                <h2 id="algo1Title">Merge Sort</h2>
+                <div id="arrayContainer1" class="array-container"></div>
+                <div id="infoText1" class="info-text"></div>
+            </div>
+            <div class="visualizer" id="compareVisualizer" style="display: none;">
+                <h2 id="algo2Title">Comparison Algorithm</h2>
+                <div id="arrayContainer2" class="array-container"></div>
+                <div id="infoText2" class="info-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+    <script type="module" src="merge.js"></script>
+</body>
+</html>

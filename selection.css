@@ -1,0 +1,128 @@
+:root {
+    --bg: #160e0f;
+    --text: #f4eded;
+    --prim: #c8a8aa;
+    --sec: #614b3d;
+    --accent: #ab9a79;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input, button, select {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--sec);
+    color: var(--text);
+    font-size: 16px;
+    width: 100%;
+    max-width: 300px;
+}
+
+input[type="range"] {
+    width: 100%;
+    max-width: 300px;
+}
+
+button {
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: var(--accent);
+}
+
+.visualizers {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.visualizer {
+    border: 1px solid var(--prim);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.array-container {
+    height: 300px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 10px;
+}
+
+.bar {
+    flex: 1;
+    margin: 0 1px;
+    background-color: var(--prim);
+    transition: height 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    position: relative;
+    border-radius: 10px 10px 0 0;
+}
+
+.bar-value {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+}
+
+.bar.selected { background-color: #e74c3c; }
+.bar.comparing { background-color: #f39c12; }
+.bar.sorted { background-color: #2ecc71; }
+
+.info-text {
+    height: 50px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+
+@keyframes swap {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@media (min-width: 768px) {
+    .controls {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .visualizers {
+        flex-direction: row;
+    }
+
+    .visualizer {
+        flex: 1;
+        min-width: 300px;
+    }
+}
