@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floyd-Warshall Algorithm Visualization</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.css" rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #160e0f;
+            --text: #f4eded;
+            --prim: #c8a8aa;
+            --sec: #614b3d;
+            --accent: #ab9a79;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 5px;
+            flex: 1 1 100%;
+        }
+
+        input, button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        input {
+            background-color: var(--sec);
+            color: var(--text);
+            flex: 1;
+        }
+
+        button {
+            background-color: var(--accent);
+            color: var(--bg);
+            cursor: pointer;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            background-color: var(--prim);
+        }
+
+        .visualization-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        #mynetwork {
+            width: 100%;
+            height: 400px;
+            border: 1px solid var(--prim);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .info-text {
+            text-align: center;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        #resultMatrix {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+
+        td {
+            border: 1px solid var(--prim);
+            padding: 5px 10px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            .input-section {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .input-group {
+                flex-wrap: wrap;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            input, button {
+                width: 100%;
+            }
+
+            .visualization-container {
+                padding: 10px;
+            }
+
+            #mynetwork {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Floyd-Warshall Algorithm Visualization</h1>
+        <div class="input-section">
+            <div class="input-group">
+                <input type="text" id="vertexInput" placeholder="Enter vertex name (e.g., A)">
+                <button id="addVertexBtn">Add Vertex</button>
+            </div>
+            <div class="input-group">
+                <input type="text" id="edgeFrom" placeholder="From vertex (e.g., A)">
+                <input type="text" id="edgeTo" placeholder="To vertex (e.g., B)">
+                <input type="number" id="edgeWeight" placeholder="Edge weight">
+                <button id="addEdgeBtn">Add Edge</button>
+            </div>
+            <div class="input-group">
+                <button id="runFloydWarshallBtn">Run Floyd-Warshall</button>
+                <button id="resetBtn">Reset</button>
+            </div>
+        </div>
+        <div class="visualization-container">
+            <div id="mynetwork"></div>
+        </div>
+        <div id="resultMatrix"></div>
+        <div id="infoText" class="info-text"></div>
+    </div>
+    <script>
+        class Graph {
+            constructor() {
+                this.vertices = new Map();
+            }
+
+            addVertex(vertex) {
+                if (!this.vertices.has(vertex)) {
+                    this.vertices.set(vertex, new Map());
+                    return true;
+                }
+                return false;
+            }
+
+            addEdge(from, to, weight) {
+                this.addVertex(from);
+                this.addVertex(to);
+                this.vertices.get(from).set(to, weight);
+            }
+
+            floydWarshall() {
+                const vertices = Array.from(this.vertices.keys());
+                const n = vertices.length;
+                const dist = Array(n).fill().map(() => Array(n).fill(Infinity));
+                const next = Array(n).fill().map(() => Array(n).fill(null));
+
+                // Initialize distances and next vertices
+                vertices.forEach((i, iIndex) => {
+                    vertices.forEach((j, jIndex) => {
+                        if (i === j) {
+                            dist[iIndex][jIndex] = 0;
+                        } else if (this.vertices.get(i).has(j)) {
+                            dist[iIndex][jIndex] = this.vertices.get(i).get(j);
+                            next[iIndex][jIndex] = j;
+                        }
+                    });
+                });
+
+                // Floyd-Warshall algorithm
+                for (let k = 0; k < n; k++) {
+                    for (let i = 0; i < n; i++) {
+                        for (let j = 0; j < n; j++) {
+                            if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                                dist[i][j] = dist[i][k] + dist[k][j];
+                                next[i][j] = next[i][k];
+                            }
+                        }
+                    }
+                }
+
+                return { dist, next, vertices };
+            }
+        }
+
+        class GraphVisualizer {
+            constructor(containerId) {
+                this.container = document.getElementById(containerId);
+                this.graph = new Graph();
+                this.network = null;
+                this.initializeNetwork();
+            }
+
+            initializeNetwork() {
+                const data = { nodes: new vis.DataSet(), edges: new vis.DataSet() };
+                const options = {
+                    physics: { enabled: false },
+                    edges: {
+                        font: { align: 'middle' },
+                        arrows: { to: { enabled: true, scaleFactor: 1 } }
+                    },
+                    nodes: { color: { background: '#c8a8aa', border: '#614b3d' } }
+                };
+                this.network = new vis.Network(this.container, data, options);
+            }
+
+            addVertex(vertex) {
+                if (this.graph.addVertex(vertex)) {
+                    this.updateVisualization();
+                    return true;
+                }
+                return false;
+            }
+
+            addEdge(from, to, weight) {
+                this.graph.addEdge(from, to, weight);
+                this.updateVisualization();
+            }
+
+            updateVisualization() {
+                const nodes = new vis.DataSet(Array.from(this.graph.vertices.keys()).map(vertex => ({ id: vertex, label: vertex })));
+                const edges = new vis.DataSet();
+
+                this.graph.vertices.forEach((edgeMap, from) => {
+                    edgeMap.forEach((weight, to) => {
+                        edges.add({
+                            from,
+                            to,
+                            label: weight.toString(),
+                            color: { color: '#3498db' }
+                        });
+                    });
+                });
+
+                this.network.setData({ nodes, edges });
+            }
+
+            runFloydWarshall() {
+                const { dist, next, vertices } = this.graph.floydWarshall();
+                this.visualizeFloydWarshall(dist, next, vertices);
+                return { dist, next, vertices };
+            }
+
+            visualizeFloydWarshall(dist, next, vertices) {
+                const resultMatrix = document.getElementById('resultMatrix');
+                resultMatrix.innerHTML = '<h3>Shortest Distances:</h3>';
+                
+                const table = document.createElement('table');
+                const headerRow = table.insertRow();
+                headerRow.insertCell(); // Empty cell for top-left corner
+                
+                vertices.forEach(vertex => {
+                    const th = document.createElement('th');
+                    th.textContent = vertex;
+                    headerRow.appendChild(th);
+                });
+
+                vertices.forEach((fromVertex, i) => {
+                    const row = table.insertRow();
+                    const th = document.createElement('th');
+                    th.textContent = fromVertex;
+                    row.appendChild(th);
+
+                    vertices.forEach((toVertex, j) => {
+                        const cell = row.insertCell();
+                        cell.textContent = dist[i][j] === Infinity ? '∞' : dist[i][j];
+                    });
+                });
+
+                resultMatrix.appendChild(table);
+            }
+
+            reset() {
+                this.graph = new Graph();
+                this.updateVisualization();
+                document.getElementById('resultMatrix').innerHTML = '';
+            }
+        }
+
+        // Usage
+        document.addEventListener('DOMContentLoaded', () => {
+            const visualizer = new GraphVisualizer('mynetwork');
+
+            document.getElementById('addVertexBtn').addEventListener('click', () => {
+                const vertex = document.getElementById('vertexInput').value.trim();
+                if (visualizer.addVertex(vertex)) {
+                    document.getElementById('vertexInput').value = '';
+                    displayInfo(`Vertex ${vertex} added.`);
+                } else {
+                    displayInfo('Invalid vertex name or already exists.');
+                }
+            });
+
+            document.getElementById('addEdgeBtn').addEventListener('click', () => {
+                const from = document.getElementById('edgeFrom').value.trim();
+                const to = document.getElementById('edgeTo').value.trim();
+                const weight = parseFloat(document.getElementById('edgeWeight').value);
+
+                if (from && to && !isNaN(weight)) {
+                    visualizer.addEdge(from, to, weight);
+                    document.getElementById('edgeFrom').value = '';
+                    document.getElementById('edgeTo').value = '';
+                    document.getElementById('edgeWeight').value = '';
+                    displayInfo(`Edge from ${from} to ${to} with weight ${weight} added.`);
+                } else {
+                    displayInfo('Invalid input for edge.');
+                }
+            });
+
+            document.getElementById('runFloydWarshallBtn').addEventListener('click', () => {
+                try {
+                    visualizer.runFloydWarshall();
+                    displayInfo('Floyd-Warshall algorithm executed. Check the result matrix below.');
+                } catch (error) {
+                    displayInfo(error.message);
+                }
+            });
+
+            document.getElementById('resetBtn').addEventListener('click', () => {
+                visualizer.reset();
+                displayInfo('Graph reset. You can start adding vertices and edges.');
+            });
+        });
+
+        function displayInfo(message) {
+            document.getElementById('infoText').textContent = message;
+        }
+    </script>
+</body>
+</html>

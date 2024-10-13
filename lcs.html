@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCS Visualization</title>
+
+    <style>
+        :root {
+            --bg: #160e0f;
+            --text: #f4eded;
+            --prim: #c8a8aa;
+            --sec: #614b3d;
+            --accent: #ab9a79;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input,
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            flex: 1 1 auto;
+            min-width: 120px;
+            box-sizing: border-box;
+        }
+
+        input {
+            background-color: var(--sec);
+            color: var(--text);
+        }
+
+        button {
+            background-color: var(--accent);
+            color: var(--bg);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--prim);
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .speed-control input[type="range"] {
+            flex: 0 0 100px;
+        }
+
+        .visualization-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            overflow: auto;
+        }
+
+        .lcs-matrix {
+            display: inline-grid;
+            gap: 2px;
+            padding: 10px;
+        }
+
+        .cell {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--sec);
+            color: var(--text);
+            font-size: 14px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .cell.current {
+            background-color: var(--accent);
+            color: var(--bg);
+        }
+
+        .cell.filled {
+            background-color: var(--prim);
+        }
+
+        .info-text {
+            text-align: center;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            .input-section {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+
+            input,
+            button {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .visualization-container {
+                padding: 10px;
+            }
+
+            .cell {
+                width: 25px;
+                height: 25px;
+                font-size: 12px;
+            }
+
+            .speed-control {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .speed-control input[type="range"] {
+                flex: 0 0 80%;
+                order: -1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>LCS Visualization</h1>
+        <div class="input-section">
+            <input type="text" id="sequence1" placeholder="Enter first sequence">
+            <input type="text" id="sequence2" placeholder="Enter second sequence">
+            <button id="startBtn">Start</button>
+            <button id="stepBtn">Step</button>
+            <button id="resetBtn">Reset</button>
+        </div>
+        <div class="speed-control">
+            <label for="speedControl">Speed:</label>
+            <input type="range" id="speedControl" min="1" max="5" value="3">
+            <span id="speedValue">3</span>
+        </div>
+        <div class="visualization-container">
+            <div id="lcsMatrix" class="lcs-matrix"></div>
+        </div>
+        <div id="infoText" class="info-text"></div>
+    </div>
+    <script src="lcs.js"></script>
+</body>
+
+</html>

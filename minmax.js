@@ -14,6 +14,7 @@ let intervalId = null;
 let isRunning = false;
 let speed = 3;
 
+// Event listeners remain the same
 randomArrayBtn.addEventListener('click', generateRandomArray);
 startBtn.addEventListener('click', startVisualization);
 stepBtn.addEventListener('click', stepVisualization);
@@ -41,10 +42,14 @@ function startVisualization() {
 }
 
 function stepVisualization() {
-    if (!isRunning) startVisualization();
-    else if (intervalId) {
-        clearInterval(intervalId);
-        intervalId = null;
+    if (!isRunning) {
+        startVisualization();
+    } else {
+        // If already running, allow stepping through
+        if (currentStep < array.length) {
+            minMaxStep(currentStep);
+            currentStep++;
+        }
     }
 }
 
@@ -60,21 +65,27 @@ function resetVisualization() {
 }
 
 function visualizeArray(current = -1, min = -1, max = -1) {
-    arrayContainer.innerHTML = '';
+    arrayContainer.innerHTML = ''; // Clear previous bars
     const maxVal = Math.max(...array);
     
     array.forEach((value, index) => {
         const bar = document.createElement('div');
         bar.className = 'bar';
-        const height = (value / maxVal) * 280;
+        const height = (value / maxVal) * 280; // Adjust based on your layout
         bar.style.height = `${height}px`;
-        bar.textContent = value;
 
+        // Create a span for the bar value
+        const valueLabel = document.createElement('span');
+        valueLabel.className = 'bar-value';
+        valueLabel.textContent = value;
+        bar.appendChild(valueLabel); // Append value label to bar
+
+        // Apply classes based on current, min, and max indices
         if (index === current) bar.classList.add('current');
         if (index === min) bar.classList.add('min');
         if (index === max) bar.classList.add('max');
 
-        arrayContainer.appendChild(bar);
+        arrayContainer.appendChild(bar); // Append bar to container
     });
 }
 

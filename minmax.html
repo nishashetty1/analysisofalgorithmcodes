@@ -7,30 +7,39 @@
     <title>Min-Max Algorithm Visualization</title>
 
     <style>
-        
+        :root {
+            --bg: #160e0f;
+            --text: #f4eded;
+            --prim: #c8a8aa;
+            --sec: #614b3d;
+            --accent: #ab9a79;
+        }
+
         body {
             font-family: Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
-            padding: 0;
+            padding: 20px;
+            box-sizing: border-box;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f0f0f0;
         }
 
         .container {
-            background-color: white;
+            width: 90%;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            width: 80%;
-            max-width: 800px;
         }
 
         h1 {
             text-align: center;
-            color: #333;
+            margin-bottom: 20px;
         }
 
         .input-section {
@@ -42,24 +51,29 @@
 
         input,
         button {
-            padding: 8px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
             font-size: 14px;
+            flex: 1 1 auto;
+            min-width: 120px;
+            box-sizing: border-box;
         }
 
-        input[type="text"] {
-            flex-grow: 1;
+        input {
+            background-color: var(--sec);
+            color: var(--text);
         }
 
         button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
+            background-color: var(--accent);
+            color: var(--bg);
             cursor: pointer;
             transition: background-color 0.3s;
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: var(--prim);
         }
 
         .speed-control {
@@ -69,24 +83,44 @@
             margin-bottom: 20px;
         }
 
+        .speed-control input[type="range"] {
+            flex: 0 0 100px;
+        }
+
+        .visualization-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
         .array-container {
+            height: 300px;
             display: flex;
             justify-content: center;
             align-items: flex-end;
-            height: 300px;
-            margin-bottom: 20px;
+            gap: 2px;
         }
 
         .bar {
-            width: 30px;
-            margin: 0 2px;
-            background-color: #3498db;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            color: white;
+            flex: 1;
+            background-color: var(--prim);
+            transition: height 0.3s ease-in-out, background-color 0.3s ease-in-out;
+            position: relative;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .bar-value {
+            position: absolute;
+            bottom: 100%; /* Position above the bar */
+            left: 50%;
+            transform: translateX(-50%);
             font-size: 12px;
-            transition: all 0.3s ease;
+            color: var(--text);
+            padding-bottom: 4px; /* Add some space above the bar */
+            white-space: nowrap; /* Prevent text wrapping */
+            z-index: -1;
         }
 
         .bar.current {
@@ -124,11 +158,11 @@
             <input type="range" id="speedControl" min="1" max="5" value="3">
             <span id="speedValue">3</span>
         </div>
-        <div id="arrayContainer" class="array-container"></div>
+        <div class="visualization-container">
+            <div id="arrayContainer" class="array-container"></div>
+        </div>
         <div id="infoText" class="info-text"></div>
     </div>
-
-
     <script src="minmax.js"></script>
 </body>
 
