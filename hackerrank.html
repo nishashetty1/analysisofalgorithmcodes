@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Path Visualizer</title>
+    <style>
+        :root {
+            --bg: #160e0f;
+            --text: #f4eded;
+            --prim: #c8a8aa;
+            --sec: #614b3d;
+            --accent: #ab9a79;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .images {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px 0;
+            border: 2px solid var(--accent);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        img {
+            width: 100%; /* Full width of the container */
+            max-width: 400px; /* Limit max width for larger screens */
+            border-radius: 10px;
+            margin: 5px 0;
+            object-fit: cover; /* Ensure images cover the area properly */
+        }
+
+        /* Flexbox for category containers */
+        .category {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Media queries for responsiveness */
+        @media (min-width: 600px) {
+            .images {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-around;
+            }
+
+            .container {
+                width: 30%; /* Adjust width for medium to larger screens */
+                margin: 10px;
+            }
+
+            .category {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 90%; /* Full width for smaller screens */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="images">
+
+        <div class="easy container category">
+            <h1>Easy Problems</h1>
+            <img src="./imgs/easy1.png" alt="Description of easy problem 1">
+            <img src="./imgs/easy2.png" alt="Description of easy problem 2">
+            <img src="./imgs/easy3.png" alt="Description of easy problem 3">
+            <img src="./imgs/easy4.png" alt="Description of easy problem 4">
+            <img src="./imgs/easy5.png" alt="Description of easy problem 5">
+        </div>
+
+        <div class="medium container category">
+            <h1>Medium Problems</h1>
+            <img src="./imgs/med1.png" alt="Description of medium problem 1">
+            <img src="./imgs/med2.png" alt="Description of medium problem 2">
+            <img src="./imgs/med3.png" alt="Description of medium problem 3">
+        </div>
+
+        <div class="hard container category">
+            <h1>Hard Problem</h1>
+            <img src="./imgs/hard1.png" alt="Description of hard problem">
+        </div>
+
+    </div>
+</body>
+
+</html>

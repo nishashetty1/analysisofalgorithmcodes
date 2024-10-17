@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Knapsack Algorithm Visualization</title>
+    <title>Graph Coloring Visualization</title>
 
     <style>
         :root {
@@ -50,8 +50,7 @@
         }
 
         input,
-        button,
-        select {
+        button {
             padding: 10px;
             border: none;
             border-radius: 5px;
@@ -61,7 +60,7 @@
             box-sizing: border-box;
         }
 
-        input, select {
+        input {
             background-color: var(--sec);
             color: var(--text);
         }
@@ -96,38 +95,30 @@
             overflow: hidden;
         }
 
-        .item-container {
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-end;
+        #graphContainer {
             height: 300px;
-        }
-
-        .item {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            transition: opacity 0.3s ease-in-out;
         }
 
-        .item-bar {
+        .node {
             width: 40px;
-            background-color: var(--prim);
-            transition: height 0.3s ease-in-out, background-color 0.3s ease-in-out;
-            border-radius: 4px 4px 0 0;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            position: absolute;
+            transition: background-color 0.3s ease-in-out;
         }
 
-        .item-info {
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .item.selected .item-bar {
-            background-color: #2ecc71;
-        }
-
-        .item.current .item-bar {
-            background-color: #e74c3c;
+        .edge {
+            position: absolute;
+            background-color: var(--text);
+            height: 2px;
+            transform-origin: left center;
         }
 
         .info-text {
@@ -136,67 +127,68 @@
             margin-top: 20px;
         }
 
+        #graphContainer {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
         @media (max-width: 600px) {
             .container {
-                width: 95%;
                 padding: 10px;
             }
-            
+
             .input-section {
                 flex-direction: column;
+                gap: 5px;
             }
-            
-            input, button, select {
+
+            h1 {
+                font-size: 25px;
+            }
+
+            input,
+            button {
                 width: 100%;
-                margin-bottom: 10px;
+                min-width: 0;
             }
-            
-            .item-container {
+
+            .visualization-container {
+                padding: 10px;
+            }
+
+            #graphContainer {
                 height: 200px;
             }
-            
-            .item-bar {
+
+            .node {
                 width: 30px;
+                height: 30px;
+                font-size: 12px;
             }
-        }
-        
-        /* Add styles for DP table */
-        .dp-table {
-            width: 100%;
-            overflow-x: auto;
-            margin-bottom: 20px;
-        }
-        
-        .dp-table table {
-            border-collapse: collapse;
-        }
-        
-        .dp-table th, .dp-table td {
-            border: 1px solid var(--sec);
-            padding: 5px;
-            text-align: center;
-        }
-        
-        .dp-table .current {
-            background-color: var(--accent);
-            color: var(--bg);
+
+            .speed-control {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .speed-control input[type="range"] {
+                flex: 0 0 80%;
+                order: -1;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Knapsack Algorithm Visualization</h1>
+        <h1>Graph Coloring Visualization</h1>
         <div class="input-section">
-            <input type="text" id="itemsInput" placeholder="Enter items as 'weight,value;' (e.g., '10,60;20,100;30,120')">
-            <input type="number" id="capacityInput" placeholder="Enter knapsack capacity">
-            <button id="randomItemsBtn">Generate Random Items</button>
-            <select id="algorithmSelect">
-                <option value="fractional">Fractional Knapsack</option>
-                <option value="01">0/1 Knapsack</option>
-            </select>
-            <button id="greedyBtn">Greedy Approach</button>
-            <button id="dpBtn">Dynamic Programming</button>
+            <input type="number" id="nodeInput" placeholder="Number of nodes">
+            <button id="generateGraphBtn">Generate Random Graph</button>
+            <button id="startBtn">Start Coloring</button>
+            <button id="stepBtn">Step</button>
             <button id="resetBtn">Reset</button>
         </div>
         <div class="speed-control">
@@ -204,13 +196,12 @@
             <input type="range" id="speedControl" min="1" max="5" value="3">
             <span id="speedValue">3</span>
         </div>
-        <div id="dpTableContainer"></div>
         <div class="visualization-container">
-            <div id="itemContainer" class="item-container"></div>
+            <div id="graphContainer"></div>
         </div>
         <div id="infoText" class="info-text"></div>
     </div>
-    <script src="knapsack.js"></script>
+    <script src="graph.js"></script>
 </body>
 
 </html>
